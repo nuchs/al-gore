@@ -1,6 +1,40 @@
 package main
 
-import "testing"
+import (
+	"testing"
+)
+
+func abs(x int) int {
+	if x < 0 {
+		return -x
+	}
+
+	return x
+}
+
+func Fuzz_Swap(f *testing.F) {
+	data := generateData(30, random)
+	f.Add(0, 0)
+	f.Add(0, 1)
+	f.Add(-1, -2)
+	f.Fuzz(func(t *testing.T, first, second int) {
+		ix := abs(first) % len(data)
+		iy := abs(second) % len(data)
+		x_orig := data[ix]
+		y_orig := data[iy]
+
+		swap(data, ix, iy)
+
+		if data[ix] != y_orig || data[iy] != x_orig {
+			t.Errorf(
+				"expected data[%d]=%d, data[%d]=%d but got data[%d]=%d, data[%d]=%d",
+				ix, x_orig,
+				iy, y_orig,
+				ix, data[ix],
+				iy, data[iy])
+		}
+	})
+}
 
 func Test_DataGeneration(t *testing.T) {
 	testCases := []struct {

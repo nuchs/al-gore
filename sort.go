@@ -1,7 +1,19 @@
 package main
 
-type sorter interface {
-	sort([]int)
+type sorter func([]int)
+
+type test struct {
+	name   string
+	sorter sorter
+}
+
+func generateSortTests() []test {
+	tests := make([]test, 2)
+
+	tests[0] = test{name: "Bubble sort", sorter: bubbleSort}
+	tests[1] = test{name: "Insertion sort", sorter: insertionSort}
+
+	return tests
 }
 
 func swap(data []int, x, y int) {
