@@ -5,7 +5,7 @@ import (
 	"errors"
 )
 
-type sorter func([]int, context.Context) error
+type sorter func([]int, context.Context) ([]int, error)
 
 type test struct {
 	name   string
@@ -37,7 +37,7 @@ func isSorted(data []int) bool {
 	return true
 }
 
-func bubbleSort(data []int, ctx context.Context) error {
+func bubbleSort(data []int, ctx context.Context) ([]int, error) {
 	for i := 0; i < len(data); i++ {
 		for j := i + 1; j < len(data); j++ {
 			if data[i] > data[j] {
@@ -46,23 +46,23 @@ func bubbleSort(data []int, ctx context.Context) error {
 		}
 
 		if err := ctx.Err(); err != nil {
-			return errors.New("Timed out")
+			return nil, errors.New("Timed out")
 		}
 	}
 
-	return nil
+	return data, nil
 }
 
-func insertionSort(data []int, ctx context.Context) error {
+func insertionSort(data []int, ctx context.Context) ([]int, error) {
 	for i := 1; i < len(data); i++ {
 		for j := i; j > 0 && data[j-1] > data[j]; j-- {
 			swap(data, j, j-1)
 		}
 
 		if err := ctx.Err(); err != nil {
-			return errors.New("Timed out")
+			return nil, errors.New("Timed out")
 		}
 	}
 
-	return nil
+	return data, nil
 }

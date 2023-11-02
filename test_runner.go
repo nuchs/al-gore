@@ -44,12 +44,13 @@ func runTest(test sorter, baseData []int) (int, error) {
 	defer cancel()
 
 	start := time.Now()
-	if err := test(data, ctx); err != nil {
+	result, err := test(data, ctx)
+	if err != nil {
 		return -1, err
 	}
 	elapsed := time.Since(start)
 
-	if !isSorted(data) {
+	if !isSorted(result) {
 		return -1, errors.New("Fail")
 	} else {
 		return int(elapsed.Microseconds()), nil
