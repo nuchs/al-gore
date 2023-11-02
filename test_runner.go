@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"time"
 )
+
+const oneSecond = time.Duration(time.Second)
 
 func runTests(tests []test, baseData []testData) {
 	for _, t := range tests {
@@ -15,7 +18,7 @@ func runTests(tests []test, baseData []testData) {
 			asc := benchmark(t.sorter, set.asc)
 			desc := benchmark(t.sorter, set.desc)
 			rand := benchmark(t.sorter, set.rand)
-			fmt.Printf("%s\t%8v  %8v  %8v\n", set.size, asc, desc, rand)
+			fmt.Printf("%s\t%11v  %11v  %11v\n", set.size, asc, desc, rand)
 		}
 		fmt.Println()
 	}
@@ -37,8 +40,13 @@ func benchmark(test sorter, data []int) string {
 
 func runTest(test sorter, baseData []int) (int, error) {
 	data := copyData(baseData)
+	ctx, cancel := context.WithTimeout(context.Background(), oneSecond)
+	defer cancel()
+
 	start := time.Now()
-	test(data)
+	if err := test(data, ctx); err != nil {
+		return -1, err
+	}
 	elapsed := time.Since(start)
 
 	if !isSorted(data) {
