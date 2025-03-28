@@ -19,8 +19,8 @@ const (
 
 func generateDataSet() []testData {
 	const small = 1000
-	const medium = 10000
-	const large = 100000
+	const medium = small * 100
+	const large = medium * 100
 
 	dataSet := make([]testData, 3)
 	dataSet[0] = testData{

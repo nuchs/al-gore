@@ -1,3 +1,3 @@
-module github.com/nuchs/goaglor
+module github.com/nuchs/al-gore
 
-go 1.21.3
+go 1.24.1

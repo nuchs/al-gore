@@ -38,10 +38,11 @@ func isSorted(data []int) bool {
 }
 
 func bubbleSort(data []int, ctx context.Context) ([]int, error) {
-	for i := 0; i < len(data); i++ {
-		for j := i + 1; j < len(data); j++ {
-			if data[i] > data[j] {
-				swap(data, i, j)
+	n := len(data)
+	for i := range n {
+		for j := 1; j < n-i; j++ {
+			if data[j-1] > data[j] {
+				swap(data, j-1, j)
 			}
 		}
 
@@ -54,7 +55,8 @@ func bubbleSort(data []int, ctx context.Context) ([]int, error) {
 }
 
 func insertionSort(data []int, ctx context.Context) ([]int, error) {
-	for i := 1; i < len(data); i++ {
+	n := len(data)
+	for i := 1; i < n; i++ {
 		for j := i; j > 0 && data[j-1] > data[j]; j-- {
 			swap(data, j, j-1)
 		}
